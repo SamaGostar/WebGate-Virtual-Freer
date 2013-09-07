@@ -11,7 +11,7 @@
 */
 	//-- اطلاعات کلی پلاگین
 	$pluginData[zarinpalwg][type] = 'payment';
-	$pluginData[zarinpalwg][name] = 'زرین پال - وب گین';
+	$pluginData[zarinpalwg][name] = 'زرین پال - وب گیت';
 	$pluginData[zarinpalwg][uniq] = 'zarinpalwg';
 	$pluginData[zarinpalwg][description] = 'مخصوص پرداخت با دروازه پرداخت <a href="http://zarinpal.com">زرین‌پال‌</a>';
 	$pluginData[zarinpalwg][author][name] = 'Freer';
@@ -50,7 +50,7 @@
 	
 		if ($res['Status'] == 100)
 		{
-			$update[payment_rand]		= $res;
+			$update[payment_rand]		= $res[Authority];
 			$sql = $db->queryUpdate('payment', $update, 'WHERE `payment_rand` = "'.$invoice_id.'" LIMIT 1;');
 			$db->execute($sql);
 			header('location:https://www.zarinpal.com/pg/StartPay/'.$res['Authority']);
@@ -83,7 +83,6 @@
 			
 			$amount		= round($payment[payment_amount]/10);
 			$client = new nusoap_client('https://de.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
-			$res = $client->call("PaymentVerification", array($merchantID, $Authority, $amount));
 			$res = $client->call("PaymentVerification", array(
 															array(
 																	'MerchantID'	 => $merchantID,
