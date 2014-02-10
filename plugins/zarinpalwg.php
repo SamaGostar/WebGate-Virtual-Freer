@@ -98,7 +98,7 @@
 					//-- آماده کردن خروجی
 					$output[status]		= 1;
 					$output[res_num]	= $Authority;
-					$output[ref_num]	= $res['RefId'];
+					$output[ref_num]	= $res['RefID'];
 					$output[payment_id]	= $payment[payment_id];
 				}
 				else
