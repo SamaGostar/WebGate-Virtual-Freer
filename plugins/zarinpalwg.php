@@ -34,26 +34,25 @@
 		$invoice_id		= $data[invoice_id];
 		$callBackUrl 	= $data[callback];
 		
-		$client = new nusoap_client('https://de.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
+		$client = new nusoap_client('https://www.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
 		$client->soap_defencoding = 'UTF-8';
 		$res = $client->call("PaymentRequest", array(
-													array(
-															'MerchantID' 	=> $merchantID,
-															'Amount' 		=> $amount,
-															'Description' 	=> $data[title].' - '.$data[invoice_id],
-															'Email' 		=> $Email,
-															'Mobile' 		=> $Mobile,
-															'CallbackURL' 	=> $callBackUrl
-														)
-													)
-		);
+			array(
+				'MerchantID' 	=> $merchantID,
+				'Amount' 		=> $amount,
+				'Description' 	=> $data[title].' - '.$data[invoice_id],
+				'Email' 		=> $Email,
+				'Mobile' 		=> $Mobile,
+				'CallbackURL' 	=> $callBackUrl
+			)
+		));
 	
 		if ($res['Status'] == 100)
 		{
 			$update[payment_rand]		= $res[Authority];
 			$sql = $db->queryUpdate('payment', $update, 'WHERE `payment_rand` = "'.$invoice_id.'" LIMIT 1;');
 			$db->execute($sql);
-			header('location:https://www.zarinpal.com/pg/StartPay/'.$res['Authority']);
+			header('location:https://www.zarinpal.com/pg/StartPay/' . $res['Authority']);
 			exit;
 		}
 		else
@@ -82,15 +81,14 @@
 			$payment 	= $db->fetch($sql);
 			
 			$amount		= round($payment[payment_amount]/10);
-			$client = new nusoap_client('https://de.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
+			$client = new nusoap_client('https://www.zarinpal.com/pg/services/WebGate/wsdl', 'wsdl');
 			$res = $client->call("PaymentVerification", array(
-															array(
-																	'MerchantID'	 => $merchantID,
-																	'Authority' 	 => $Authority,
-																	'Amount'	 	 => $amount
-																)
-															)
-		);
+				array(
+					'MerchantID'	 => $merchantID,
+					'Authority' 	 => $Authority,
+					'Amount'	 => $amount
+				)
+			));
 			if ($payment[payment_status] == 1)
 			{
 				if ($res['Status'] == 100)//-- موفقیت آمیز
@@ -117,9 +115,9 @@
 		}
 		else
 		{
-				//-- شماره یکتا اشتباه است
-				$output[status]	= 0;
-				$output[message]= 'شماره یکتا اشتباه است.';
+			//-- شماره یکتا اشتباه است
+			$output[status]	= 0;
+			$output[message]= 'شماره یکتا اشتباه است.';
 		}
 		return $output;
 	}
