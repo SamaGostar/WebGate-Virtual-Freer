@@ -39,10 +39,10 @@
 		$res = $client->call("PaymentRequest", array(
 			array(
 				'MerchantID' 	=> $merchantID,
-				'Amount' 		=> $amount,
+				'Amount' 	=> $amount,
 				'Description' 	=> $data[title].' - '.$data[invoice_id],
-				'Email' 		=> $Email,
-				'Mobile' 		=> $Mobile,
+				'Email' 	=> $data[email],
+				'Mobile' 	=> $data[mobile],
 				'CallbackURL' 	=> $callBackUrl
 			)
 		));
